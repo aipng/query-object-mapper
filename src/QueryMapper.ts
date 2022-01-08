@@ -6,16 +6,31 @@ import StringParameter from './StringParameter'
 export default class QueryMapper {
 
 	private params: QueryParameter[] = []
+	private conditions: Record<string, string> = {}
 
 
 	parse(query: any) {
-		const result = {}
+		const result: Record<string, string> = {}
 
 		this.params.forEach((parameter) => {
-			Object.assign(result, {
-				[parameter.name]: parameter.parse(query[parameter.urlName]),
-			})
+			Object.assign(
+				result,
+				{
+					[parameter.name]: parameter.parse(query[parameter.urlName]),
+				},
+			)
 		})
+
+		for (const [conditionName, parameterName] of Object.entries(this.conditions)) {
+			if (result[parameterName]) {
+				Object.assign(
+					result,
+					{
+						[conditionName]: true,
+					}
+				)
+			}
+		}
 
 		return result
 	}
@@ -23,6 +38,7 @@ export default class QueryMapper {
 
 	generateQuery(params: Record<string, string | number | boolean | null>): Record<string, string | number | null> {
 		const result: Record<string, string | number | null> = {}
+		const conditionValues: Record<string, string | number | null> = {}
 
 		for (const [parameterName, parameterValue] of Object.entries(params)) {
 			const parameter = this.params.find(item => item.name === parameterName)
@@ -31,8 +47,18 @@ export default class QueryMapper {
 				const generatedValue = parameter.generate(parameterValue)
 
 				if (generatedValue) {
-					result[parameter.urlName] = generatedValue
+					if (this.conditions[parameter.urlName] === undefined) {
+						result[parameter.urlName] = generatedValue
+					} else {
+						conditionValues[parameter.urlName] = generatedValue
+					}
 				}
+			}
+		}
+
+		for (const [conditionName, parameterName] of Object.entries(this.conditions)) {
+			if (!conditionValues[conditionName]) {
+				delete result[parameterName]
 			}
 		}
 
@@ -65,4 +91,14 @@ export default class QueryMapper {
 
 		return parameter
 	}
+
+
+	addConditionFor(parameterName: string, conditionName: string): this {
+		this.addBooleanParam(conditionName)
+
+		this.conditions[conditionName] = parameterName
+
+		return this
+	}
+
 }

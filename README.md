@@ -1,5 +1,4 @@
-Query object mapper
-===================
+# Query object mapper
 How to install?
 ```shell
 npm install query-object-mapper --save
@@ -12,7 +11,7 @@ Currently, three basic parameter types are recognized:
 - number
 - boolean
 
-**Usage?**
+## Usage
 
 When defining custom mapper, man must define parameter types and names.
 
@@ -40,7 +39,53 @@ const myParameters = mapper.parse(someUrlQueryParameters)
 const urlQueryObject = mapper.generateQuery(myParameterObject)
 ```
 
-**How does it work?**
+### Conditional parameters
+
+When building filter form, I found out that it comes handy to be able to define conditional parameter. Eg. I'd like to limit results by selected user - but only when I check related checkbox.
+
+I often use those two related params conditionally - I do propagate selected user to URL query only when checkbox is checked. Othwerwise I'm not interested in the "selected user" value.
+
+How do I map this?
+
+```javascript
+import QueryMapper from 'query-object-mapper'
+
+const mapper = new QueryMapper()
+
+mapper.addStringParam('fulfilled')
+mapper.addConditionFor('fulfilled', 'fulfilledCondition')
+
+mapper.addStringParam('omitted')
+mapper.addConditionFor('omitted', 'omittedCondition')
+
+// get someUrlQueryParameters,
+// eg. convert URL query from string to object
+const myParameters = mapper.parse({
+	fulfilled: 'foo',
+})
+
+console.log(myParameters === {
+	fulfilled: 'foo',
+	fulfilledCondition: true,
+	omitted: null,
+	omittedCondition: false,
+
+}) // true
+
+// create myParameterObject
+const urlQueryObject = mapper.generateQuery({
+	fulfilled: 'foo',
+	fulfilledCondition: true,
+	omitted: 'bar',
+	omittedCondition: false,
+})
+
+console.log(urlQueryObject === {
+	fulfilled: 'foo',
+}) // true
+```
+
+## How does it work?
 - default parameter values are not propagated to query
 - boolean parameters are converted to string representation (true => '1', false => '0')
 - unknown options are silently parsed to default value, but cannot be generated to query

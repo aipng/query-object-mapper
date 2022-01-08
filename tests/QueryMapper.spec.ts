@@ -193,4 +193,78 @@ describe('Query mapper', () => {
 
 	})
 
+	describe('should handle conditional parameters', () => {
+
+		it('should conditionally generate query parameter', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			service.addStringParam('omitted')
+			service.addConditionFor('omitted', 'omittedCondition')
+
+			const parameterObject = {
+				fulfilled: 'foo',
+				fulfilledCondition: true,
+				omitted: 'bar',
+				omittedCondition: false,
+			}
+
+			expect(service.generateQuery(parameterObject)).toStrictEqual({
+				fulfilled: 'foo',
+			})
+		})
+
+		it('should correctly handle query generation for empty parameter with condition', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const parameterObject = {
+				fulfilled: null,
+				fulfilledCondition: true,
+			}
+
+			expect(service.generateQuery(parameterObject)).toStrictEqual({})
+		})
+
+		it('should parse conditional parameters', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			service.addStringParam('omitted')
+			service.addConditionFor('omitted', 'omittedCondition')
+
+			const queryObject = {
+				fulfilled: 'foo',
+			}
+
+			expect(service.parse(queryObject)).toStrictEqual({
+				fulfilled: 'foo',
+				fulfilledCondition: true,
+				omitted: null,
+				omittedCondition: false,
+			})
+		})
+
+		it('should correctly parse empty conditional parameters', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const queryObject = {}
+
+			expect(service.parse(queryObject)).toStrictEqual({
+				fulfilled: null,
+				fulfilledCondition: false,
+			})
+		})
+
+	})
+
 })
