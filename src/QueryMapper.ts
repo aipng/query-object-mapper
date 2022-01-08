@@ -9,7 +9,7 @@ export default class QueryMapper {
 	private conditions: Record<string, string> = {}
 
 
-	parse(query: any) {
+	parse(query: any): unknown {
 		const result: Record<string, string> = {}
 
 		this.params.forEach((parameter) => {
