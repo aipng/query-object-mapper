@@ -26,21 +26,6 @@ export default class StringParameter implements QueryParameter {
 	}
 
 
-	isString(): boolean {
-		return true
-	}
-
-
-	isNumber(): boolean {
-		return false
-	}
-
-
-	isBoolean(): boolean {
-		return false
-	}
-
-
 	setDefault(value: string): this {
 		if (this.options.length && !this.options.includes(value)) {
 			throw new Error(`'${value}' is not an option!`)

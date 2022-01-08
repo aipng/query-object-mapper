@@ -26,21 +26,6 @@ export default class NumberParameter implements QueryParameter {
 	}
 
 
-	isString(): boolean {
-		return false
-	}
-
-
-	isNumber(): boolean {
-		return true
-	}
-
-
-	isBoolean(): boolean {
-		return false
-	}
-
-
 	setDefault(value: number): this {
 		if (this.options.length && !this.options.includes(value)) {
 			throw new Error(`'${value}' is not an option!`)

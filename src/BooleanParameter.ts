@@ -24,21 +24,6 @@ export default class BooleanParameter implements QueryParameter {
 	}
 
 
-	isString(): boolean {
-		return false
-	}
-
-
-	isNumber(): boolean {
-		return false
-	}
-
-
-	isBoolean(): boolean {
-		return true
-	}
-
-
 	setDefault(value: boolean): this {
 		this.defaultValue = value
 

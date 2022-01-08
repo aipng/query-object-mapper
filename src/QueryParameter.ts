@@ -4,12 +4,6 @@ export default interface QueryParameter {
 
 	urlName: string
 
-	isString(): boolean
-
-	isNumber(): boolean
-
-	isBoolean(): boolean
-
 	setDefault(value: string | number | boolean): this
 
 	setOptions(options: unknown[]): this
