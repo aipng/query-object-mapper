@@ -1,19 +1,11 @@
 import QueryParameter from './QueryParameter'
+import QueryParameterBase from './QueryParameterBase'
 
-export default class NumberParameter implements QueryParameter {
-
-	private readonly _name: string
-	private readonly _urlName: string
+export default class NumberParameter extends QueryParameterBase implements QueryParameter {
 
 	private defaultValue: number | null = null
 
 	private options: number[] = []
-
-
-	constructor(name: string, urlName: string | null = null) {
-		this._name = name
-		this._urlName = urlName ?? name
-	}
 
 
 	get name(): string {

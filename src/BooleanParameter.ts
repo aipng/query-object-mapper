@@ -1,17 +1,9 @@
 import QueryParameter from './QueryParameter'
+import QueryParameterBase from './QueryParameterBase'
 
-export default class BooleanParameter implements QueryParameter {
-
-	private readonly _name: string
-	private readonly _urlName: string
+export default class BooleanParameter extends QueryParameterBase implements QueryParameter {
 
 	private defaultValue = false
-
-
-	constructor(name: string, urlName: string | null = null) {
-		this._name = name
-		this._urlName = urlName ?? name
-	}
 
 
 	get name(): string {
