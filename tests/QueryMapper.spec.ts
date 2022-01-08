@@ -105,7 +105,7 @@ describe('Query mapper', () => {
 			expect(service.generateQuery({})).toStrictEqual({})
 		})
 
-		it('should ommit default parameters in query object', () => {
+		it('should omit default parameters in query object', () => {
 			const service = new QueryMapper()
 
 			service.addStringParam('stringParam').setDefault('default')
@@ -193,7 +193,74 @@ describe('Query mapper', () => {
 
 	})
 
-	describe('should handle conditional parameters', () => {
+	describe('should manage conditional parameters', () => {
+
+		it('should refuse to add condition for unknown parameter', () => {
+			const service = new QueryMapper()
+
+			expect(() => {
+				service.addConditionFor('fulfilled', 'fulfilledCondition')
+			}).toThrowError('Unknown parameter \'fulfilled\'!')
+		})
+
+	})
+
+	describe('should parse conditional parameters', () => {
+
+		it('should parse conditions', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			service.addStringParam('omitted')
+			service.addConditionFor('omitted', 'omittedCondition')
+
+			const queryObject = {
+				fulfilled: 'foo',
+			}
+
+			expect(service.parse(queryObject)).toStrictEqual({
+				fulfilled: 'foo',
+				fulfilledCondition: true,
+				omitted: null,
+				omittedCondition: false,
+			})
+		})
+
+		it('should parse empty conditional parameters', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const queryObject = {}
+
+			expect(service.parse(queryObject)).toStrictEqual({
+				fulfilled: null,
+				fulfilledCondition: false,
+			})
+		})
+
+		it('should parse aliased conditional parameters', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled', 'f')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const queryObject = {
+				f: 'foo',
+			}
+
+			expect(service.parse(queryObject)).toStrictEqual({
+				fulfilled: 'foo',
+				fulfilledCondition: true,
+			})
+		})
+
+	})
+
+	describe('should generate conditional parameters', () => {
 
 		it('should conditionally generate query parameter', () => {
 			const service = new QueryMapper()
@@ -216,7 +283,7 @@ describe('Query mapper', () => {
 			})
 		})
 
-		it('should correctly handle query generation for empty parameter with condition', () => {
+		it('should generate correct query for empty parameter with condition', () => {
 			const service = new QueryMapper()
 
 			service.addStringParam('fulfilled')
@@ -230,39 +297,48 @@ describe('Query mapper', () => {
 			expect(service.generateQuery(parameterObject)).toStrictEqual({})
 		})
 
-		it('should parse conditional parameters', () => {
+		it('should correctly generate aliased conditional parameter', () => {
 			const service = new QueryMapper()
 
-			service.addStringParam('fulfilled')
+			service.addStringParam('fulfilled', 'f')
 			service.addConditionFor('fulfilled', 'fulfilledCondition')
 
-			service.addStringParam('omitted')
-			service.addConditionFor('omitted', 'omittedCondition')
-
-			const queryObject = {
-				fulfilled: 'foo',
-			}
-
-			expect(service.parse(queryObject)).toStrictEqual({
+			const parameterObject = {
 				fulfilled: 'foo',
 				fulfilledCondition: true,
-				omitted: null,
-				omittedCondition: false,
+			}
+
+			expect(service.generateQuery(parameterObject)).toStrictEqual({
+				f: 'foo',
 			})
 		})
 
-		it('should correctly parse empty conditional parameters', () => {
+		it('should ignore conditional aliased parameter if condition not fulfilled', () => {
 			const service = new QueryMapper()
 
-			service.addStringParam('fulfilled')
+			service.addStringParam('fulfilled', 'f')
 			service.addConditionFor('fulfilled', 'fulfilledCondition')
 
-			const queryObject = {}
-
-			expect(service.parse(queryObject)).toStrictEqual({
-				fulfilled: null,
+			const parameterObject = {
+				fulfilled: 'foo',
 				fulfilledCondition: false,
-			})
+			}
+
+			expect(service.generateQuery(parameterObject)).toStrictEqual({})
+		})
+
+		it('should ignore conditional aliased parameter with default value if condition not fulfilled', () => {
+			const service = new QueryMapper()
+
+			service.addStringParam('fulfilled', 'f').setDefault('default')
+			service.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const parameterObject = {
+				fulfilled: 'foo',
+				fulfilledCondition: false,
+			}
+
+			expect(service.generateQuery(parameterObject)).toStrictEqual({})
 		})
 
 	})

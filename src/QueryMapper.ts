@@ -3,10 +3,17 @@ import NumberParameter from './NumberParameter'
 import QueryParameter from './QueryParameter'
 import StringParameter from './StringParameter'
 
+
+interface ConditionDefinition {
+	parameterName: string
+	parameterUrlName: string
+}
+
+
 export default class QueryMapper {
 
 	private params: QueryParameter[] = []
-	private conditions: Record<string, string> = {}
+	private conditions: Record<string, ConditionDefinition> = {}
 
 
 	parse(query: any): unknown {
@@ -21,13 +28,13 @@ export default class QueryMapper {
 			)
 		})
 
-		for (const [conditionName, parameterName] of Object.entries(this.conditions)) {
-			if (result[parameterName]) {
+		for (const [conditionName, definition] of Object.entries(this.conditions)) {
+			if (result[definition.parameterName]) {
 				Object.assign(
 					result,
 					{
 						[conditionName]: true,
-					}
+					},
 				)
 			}
 		}
@@ -56,9 +63,9 @@ export default class QueryMapper {
 			}
 		}
 
-		for (const [conditionName, parameterName] of Object.entries(this.conditions)) {
+		for (const [conditionName, definition] of Object.entries(this.conditions)) {
 			if (!conditionValues[conditionName]) {
-				delete result[parameterName]
+				delete result[definition.parameterUrlName]
 			}
 		}
 
@@ -94,9 +101,18 @@ export default class QueryMapper {
 
 
 	addConditionFor(parameterName: string, conditionName: string): this {
+		const parameter = this.params.find(parameter => parameter.name === parameterName)
+
+		if (!parameter) {
+			throw new Error(`Unknown parameter '${parameterName}'!`)
+		}
+
 		this.addBooleanParam(conditionName)
 
-		this.conditions[conditionName] = parameterName
+		this.conditions[conditionName] = {
+			parameterName: parameter.name,
+			parameterUrlName: parameter.urlName,
+		}
 
 		return this
 	}
