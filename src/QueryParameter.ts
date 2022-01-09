@@ -4,12 +4,13 @@ export default interface QueryParameter {
 
 	urlName: string
 
-	setDefault(value: string | number | boolean): this
+	setDefault(value: unknown): this
 
 	setOptions(options: unknown[]): this
 
-	parse(value: string | undefined): string | number | boolean | null
+	parse(value: string | undefined): string | number | boolean | number[] | null
 
-	generate(value: string | number | boolean | null): string | number | null
+	generate(value: unknown): string | number | null
+
 }
 

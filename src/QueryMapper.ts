@@ -1,4 +1,5 @@
 import BooleanParameter from './BooleanParameter'
+import NumberArrayParameter from './NumberArrayParameter'
 import NumberParameter from './NumberParameter'
 import QueryParameter from './QueryParameter'
 import StringParameter from './StringParameter'
@@ -43,7 +44,7 @@ export default class QueryMapper {
 	}
 
 
-	generateQuery(params: Record<string, string | number | boolean | null>): Record<string, string | number | null> {
+	generateQuery(params: Record<string, unknown>): Record<string, string | number | null> {
 		const result: Record<string, string | number | null> = {}
 		const conditionValues: Record<string, string | number | null> = {}
 
@@ -93,6 +94,15 @@ export default class QueryMapper {
 
 	addBooleanParam(name: string, urlName: string | null = null): QueryParameter {
 		const parameter = new BooleanParameter(name, urlName)
+
+		this.params.push(parameter)
+
+		return parameter
+	}
+
+
+	addArrayParam(name: string, urlName: string | null = null): QueryParameter {
+		const parameter = new NumberArrayParameter(name, urlName)
 
 		this.params.push(parameter)
 

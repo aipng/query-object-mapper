@@ -16,6 +16,7 @@ describe('Query mapper', () => {
 				numberParam: '11',
 				trueParam: '1',
 				falseParam: '0',
+				numberOptions: '11,21',
 			}
 
 			const service = new QueryMapper()
@@ -24,12 +25,14 @@ describe('Query mapper', () => {
 			service.addNumberParam('numberParam')
 			service.addBooleanParam('trueParam')
 			service.addBooleanParam('falseParam')
+			service.addArrayParam('numberOptions')
 
 			expect(service.parse(testQuery)).toStrictEqual({
 				stringParam: 'string',
 				numberParam: 11,
 				trueParam: true,
 				falseParam: false,
+				numberOptions: [11, 21],
 			})
 		})
 
@@ -130,12 +133,14 @@ describe('Query mapper', () => {
 			service.addNumberParam('numberParam')
 			service.addBooleanParam('falseParam')
 			service.addBooleanParam('trueParam')
+			service.addArrayParam('numberOptions')
 
 			const parameterObject = {
 				stringParam: 'default',
 				numberParam: 10,
 				falseParam: true,
 				trueParam: true,
+				numberOptions: [12, 22],
 			}
 
 			expect(service.generateQuery(parameterObject)).toStrictEqual({
@@ -143,6 +148,7 @@ describe('Query mapper', () => {
 				numberParam: 10,
 				falseParam: '1',
 				trueParam: '1',
+				numberOptions: '12,22',
 			})
 		})
 
