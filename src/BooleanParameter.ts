@@ -6,16 +6,6 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 	private defaultValue = false
 
 
-	get name(): string {
-		return this._name
-	}
-
-
-	get urlName(): string {
-		return this._urlName
-	}
-
-
 	setDefault(value: boolean): this {
 		this.defaultValue = value
 

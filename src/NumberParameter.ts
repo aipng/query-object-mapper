@@ -8,16 +8,6 @@ export default class NumberParameter extends QueryParameterBase implements Query
 	private options: number[] = []
 
 
-	get name(): string {
-		return this._name
-	}
-
-
-	get urlName(): string {
-		return this._urlName
-	}
-
-
 	setDefault(value: number): this {
 		if (this.options.length && !this.options.includes(value)) {
 			throw new Error(`'${value}' is not an option!`)
