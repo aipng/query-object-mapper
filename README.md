@@ -6,9 +6,9 @@ npm install query-object-mapper --save
 
 Simple tool, that helps to map object with properties to query URL parameter object.
 
-Currently, three basic parameter types are recognized:
+Currently, these basic parameter types are supported:
 - string
-- number
+- number, number[]
 - boolean
 
 ## Usage
@@ -30,6 +30,7 @@ mapper.addStringParam('myString')
 	.setDefault('foo')
 mapper.addBooleanParam('myBoolean', 'myb')
 mapper.addNumberParam('myNumber').setDefault(3)
+mapper.addArrayParam('myNumber')
 
 // get someUrlQueryParameters,
 // eg. convert URL query from string to object
