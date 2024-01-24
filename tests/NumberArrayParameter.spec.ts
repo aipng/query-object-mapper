@@ -16,7 +16,7 @@ describe('Number array parameter', () => {
 			expect(parameter.parse('102')).toStrictEqual([102])
 		})
 
-		it('should parse one value', () => {
+		it('should parse values', () => {
 			const parameter = new NumberArrayParameter('parameter')
 
 			expect(parameter.parse('103,2003,30003')).toStrictEqual([103, 2003, 30003])
