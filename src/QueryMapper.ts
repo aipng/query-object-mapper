@@ -29,16 +29,18 @@ export default class QueryMapper {
 			)
 		})
 
-		for (const [conditionName, definition] of Object.entries(this.conditions)) {
-			if (result[definition.parameterName]) {
-				Object.assign(
-					result,
-					{
-						[conditionName]: true,
-					},
-				)
-			}
-		}
+		Object
+			.entries(this.conditions)
+			.forEach(([conditionName, definition]) => {
+				if (result[definition.parameterName]) {
+					Object.assign(
+						result,
+						{
+							[conditionName]: true,
+						},
+					)
+				}
+			})
 
 		return result
 	}
@@ -48,27 +50,31 @@ export default class QueryMapper {
 		const result: Record<string, string | number | null> = {}
 		const conditionValues: Record<string, string | number | null> = {}
 
-		for (const [parameterName, parameterValue] of Object.entries(params)) {
-			const parameter = this.params.find(item => item.name === parameterName)
+		Object
+			.entries(params)
+			.forEach(([parameterName, parameterValue]) => {
+				const parameter = this.params.find(item => item.name === parameterName)
 
-			if (parameter) {
-				const generatedValue = parameter.generate(parameterValue)
+				if (parameter) {
+					const generatedValue = parameter.generate(parameterValue)
 
-				if (generatedValue) {
-					if (this.conditions[parameter.urlName] === undefined) {
-						result[parameter.urlName] = generatedValue
-					} else {
-						conditionValues[parameter.urlName] = generatedValue
+					if (generatedValue) {
+						if (this.conditions[parameter.urlName] === undefined) {
+							result[parameter.urlName] = generatedValue
+						} else {
+							conditionValues[parameter.urlName] = generatedValue
+						}
 					}
 				}
-			}
-		}
+			})
 
-		for (const [conditionName, definition] of Object.entries(this.conditions)) {
-			if (!conditionValues[conditionName]) {
-				delete result[definition.parameterUrlName]
-			}
-		}
+		Object
+			.entries(this.conditions)
+			.forEach(([conditionName, definition]) => {
+				if (!conditionValues[conditionName]) {
+					delete result[definition.parameterUrlName]
+				}
+			})
 
 		return result
 	}
