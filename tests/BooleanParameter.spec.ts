@@ -34,18 +34,27 @@ describe('Boolean parameter', () => {
 			const parameter = new BooleanParameter('booleanParameter')
 
 			expect(() => {
-				parameter.setOptions([10, 20])
-			}).toThrowError('There\'s no sense to define options for boolean parameter!')
+				parameter.setOptions()
+			}).toThrow('There\'s no sense to define options for boolean parameter!')
 		})
 
-		it('should return true for any positive value', () => {
+		it('should return true only for "1"', () => {
+			const parameter = new BooleanParameter('booleanParameter')
+
+			expect(parameter.parse('1')).toBeTruthy()
+			expect(parameter.parse('0')).toBeFalsy()
+			expect(parameter.parse('anything')).toBeFalsy() // uses default value
+		})
+
+		it('should use default value for non-binary inputs', () => {
 			const parameter = new BooleanParameter('booleanParameter')
 			parameter.setDefault(true)
 
-			expect(parameter.parse('1')).toBeTruthy()
 			expect(parameter.parse('a')).toBeTruthy()
 			expect(parameter.parse('175')).toBeTruthy()
-			expect(parameter.parse('0')).toBeFalsy()
+			expect(parameter.parse('')).toBeTruthy()
+			expect(parameter.parse('   ')).toBeTruthy()
+			expect(parameter.parse('!')).toBeTruthy()
 		})
 	})
 
@@ -80,6 +89,41 @@ describe('Boolean parameter', () => {
 			expect(parameter.generate(false)).toStrictEqual('0')
 		})
 
+		it('should generate correct values when default is false', () => {
+			const parameter = new BooleanParameter('parameter')
+			parameter.setDefault(false)
+
+			expect(parameter.generate(true)).toStrictEqual('1')
+			expect(parameter.generate(false)).toBeNull()
+		})
+
+		it('should generate correct values when default is true', () => {
+			const parameter = new BooleanParameter('parameter')
+			parameter.setDefault(true)
+
+			expect(parameter.generate(false)).toStrictEqual('0')
+			expect(parameter.generate(true)).toBeNull()
+		})
+	})
+
+	describe('Constructor and properties', () => {
+		it('should set parameter name correctly', () => {
+			const parameter = new BooleanParameter('testParam')
+
+			expect(parameter.name).toBe('testParam')
+		})
+
+		it('should set URL parameter name correctly', () => {
+			const parameter = new BooleanParameter('testParam', 'urlParam')
+
+			expect(parameter.urlName).toBe('urlParam')
+		})
+
+		it('should use parameter name as URL name when not specified', () => {
+			const parameter = new BooleanParameter('testParam')
+
+			expect(parameter.urlName).toBe('testParam')
+		})
 	})
 
 })

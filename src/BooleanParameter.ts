@@ -19,11 +19,15 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 
 
 	parse(value: string | undefined): boolean {
-		if (value === undefined) {
-			return this.defaultValue
+		if (value === '1') {
+			return true
 		}
 
-		return value !== '0'
+		if (value === '0') {
+			return false
+		}
+
+		return this.defaultValue
 	}
 
 
@@ -31,6 +35,7 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 		if (this.defaultValue === value) {
 			return null
 		}
+
 		return value ? '1' : '0'
 	}
 
