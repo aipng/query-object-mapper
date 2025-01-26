@@ -21,7 +21,12 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
-    "lint": "eslint",
+    "lint:oxlint": "oxlint . -D correctness --ignore-path .gitignore",
+    "lint:eslint": "eslint .",
+    "lint": "run-s lint:oxlint lint:eslint",
+    "lintfix:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
+    "lintfix:eslint": "eslint . --fix",
+    "lintfix": "run-s lintfix:oxlint lintfix:eslint",
     "prepare": "rm -rf dist && npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
@@ -34,9 +39,15 @@
     "mapper"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.19.0",
     "@types/jest": "^29.5.11",
+    "@vitest/eslint-plugin": "^1.1.25",
     "eslint": "^9.19.0",
-    "typescript": "^5.7.2",
+    "eslint-plugin-oxlint": "^0.15.8",
+    "npm-run-all2": "^7.0.2",
+    "oxlint": "^0.15.8",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.21.0",
     "vitest": "^3.0.4"
   }
 }

@@ -13,7 +13,7 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 	}
 
 
-	setOptions(options: unknown[]): this {
+	setOptions(): this {
 		throw new Error('There\'s no sense to define options for boolean parameter!')
 	}
 
