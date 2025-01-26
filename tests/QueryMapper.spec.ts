@@ -72,7 +72,7 @@ describe('Query mapper', () => {
 
 			const testQuery = {
 				stringParam: 'invalid-option',
-				numberParam: 1000,
+				numberParam: '1000',
 			}
 
 			expect(service.parse(testQuery)).toStrictEqual({
