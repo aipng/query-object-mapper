@@ -1,25 +1,19 @@
 import QueryParameter from './QueryParameter'
 import QueryParameterBase from './QueryParameterBase'
 
-const isSameArray = (a: number[], b: number[]) =>
-	a.length === b.length &&
-	a.every((v, i) => v === b[i])
+const isSameArray = (a: number[] | null, b: number[]): boolean => {
+	if (!a) {
+		return !b.length
+	}
+
+	return a.length === b.length && a.every((v, i) => v === b[i])
+}
 
 export default class NumberArrayParameter extends QueryParameterBase implements QueryParameter {
 
 	private defaultValues: number[] = []
 
 	private options: number[] = []
-
-
-	get name(): string {
-		return this._name
-	}
-
-
-	get urlName(): string {
-		return this._urlName
-	}
 
 
 	setDefault(values: number[]): this {
@@ -55,7 +49,7 @@ export default class NumberArrayParameter extends QueryParameterBase implements 
 			return this.defaultValues ?? []
 		}
 
-		let convertedValues = value.split(',').map(item => Number.parseInt(item))
+		const convertedValues = value.split(',').map(item => Number.parseInt(item))
 
 		return this.options.length
 			? convertedValues.filter(value => this.options.includes(value))
@@ -72,9 +66,9 @@ export default class NumberArrayParameter extends QueryParameterBase implements 
 			})
 		}
 
-		return values && !isSameArray(values, this.defaultValues)
-			? values.join(',')
-			: null
+		return isSameArray(values, this.defaultValues)
+			? null
+			: values?.join(',') ?? null
 	}
 
 }

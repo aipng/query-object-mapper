@@ -17,7 +17,7 @@ export default class QueryMapper {
 	private conditions: Record<string, ConditionDefinition> = {}
 
 
-	parse(query: any): unknown {
+	parse(query: Record<string, string>): Record<string, unknown> {
 		const result: Record<string, string> = {}
 
 		this.params.forEach((parameter) => {

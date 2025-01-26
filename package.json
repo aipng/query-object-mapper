@@ -35,9 +35,8 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.5.11",
-    "eslint": "^8.57.1",
-    "jsdom": "^25.0.1",
+    "eslint": "^9.19.0",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.4"
   }
 }

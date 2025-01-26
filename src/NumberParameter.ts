@@ -36,7 +36,6 @@ export default class NumberParameter extends QueryParameterBase implements Query
 
 		if (isUndefined || (this.options.length && !this.options.includes(convertedValue))) {
 			return this.defaultValue
-
 		}
 
 		return convertedValue
