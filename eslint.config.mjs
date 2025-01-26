@@ -54,12 +54,6 @@ export default [
 		},
 	},
 
-	{
-		rules: {
-			'@typescript-eslint/no-explicit-any': 'off',
-		},
-	},
-
 	// Test files configuration
 	{
 		files: ['**/tests/*.ts', '**/tests/unit/**/*.spec.ts'],
