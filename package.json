@@ -1,6 +1,6 @@
 {
   "name": "query-object-mapper",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Karel Horský",
   "description": "Helper for mapping vue's URL query to parameter object",
   "license": "MIT",
