@@ -18,12 +18,12 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 	}
 
 
-	parse(value: string | undefined): boolean {
-		if (value === '1') {
+	parse(value: string | string[] | null | undefined): boolean {
+		if (value === '1' || value === 'true') {
 			return true
 		}
 
-		if (value === '0') {
+		if (value === '0' || value === 'false') {
 			return false
 		}
 

@@ -4,26 +4,65 @@ describe('Boolean parameter', () => {
 
 	describe('Parse boolean parameter', () => {
 
-		it('should set default parameter', () => {
-			const parameter = new BooleanParameter('booleanParameter')
-
-			parameter.setDefault(true)
-		})
-
-		it('should parse boolean parameter', () => {
-			const parameter = new BooleanParameter('booleanParameter')
+		it('should parse string values correctly', () => {
+			const parameter = new BooleanParameter('parameter')
 
 			expect(parameter.parse('1')).toBeTruthy()
 		})
 
+		it('should return default value (false) for null', () => {
+			const parameter = new BooleanParameter('parameter')
+
+			expect(parameter.parse(null)).toBeFalsy()
+		})
+
+		it('should return default value (true) for null when default is set', () => {
+			const parameter = new BooleanParameter('parameter')
+
+			parameter.setDefault(true)
+
+			expect(parameter.parse(null)).toBeTruthy()
+		})
+
+		it('should return default value for array input', () => {
+			const parameter = new BooleanParameter('parameter')
+
+			parameter.setDefault(true)
+
+			expect(parameter.parse(['1', '0'])).toBeTruthy()
+		})
+
+		it('should return true for "1" and "true" strings', () => {
+			const parameter = new BooleanParameter('parameter')
+
+			expect(parameter.parse('1')).toBeTruthy()
+			expect(parameter.parse('true')).toBeTruthy()
+			expect(parameter.parse('0')).toBeFalsy()
+			expect(parameter.parse('false')).toBeFalsy()
+			expect(parameter.parse('anything')).toBeFalsy() // uses default value
+		})
+
+		it('should use default value for any non-boolean inputs', () => {
+			const parameter = new BooleanParameter('parameter')
+
+			parameter.setDefault(true)
+
+			expect(parameter.parse('a')).toBeTruthy()
+			expect(parameter.parse('175')).toBeTruthy()
+			expect(parameter.parse('')).toBeTruthy()
+			expect(parameter.parse('   ')).toBeTruthy()
+			expect(parameter.parse(['1'])).toBeTruthy()
+			expect(parameter.parse(null)).toBeTruthy()
+		})
+
 		it('should return false as a default value for undefined parameter by default', () => {
-			const parameter = new BooleanParameter('booleanParameter')
+			const parameter = new BooleanParameter('parameter')
 
 			expect(parameter.parse(undefined)).toBeFalsy()
 		})
 
 		it('should return default value for undefined parameter', () => {
-			const parameter = new BooleanParameter('booleanParameter')
+			const parameter = new BooleanParameter('parameter')
 
 			parameter.setDefault(true)
 
@@ -31,30 +70,9 @@ describe('Boolean parameter', () => {
 		})
 
 		it('should throw error when setting options', () => {
-			const parameter = new BooleanParameter('booleanParameter')
+			const parameter = new BooleanParameter('parameter')
 
-			expect(() => {
-				parameter.setOptions()
-			}).toThrow('There\'s no sense to define options for boolean parameter!')
-		})
-
-		it('should return true only for "1"', () => {
-			const parameter = new BooleanParameter('booleanParameter')
-
-			expect(parameter.parse('1')).toBeTruthy()
-			expect(parameter.parse('0')).toBeFalsy()
-			expect(parameter.parse('anything')).toBeFalsy() // uses default value
-		})
-
-		it('should use default value for non-binary inputs', () => {
-			const parameter = new BooleanParameter('booleanParameter')
-			parameter.setDefault(true)
-
-			expect(parameter.parse('a')).toBeTruthy()
-			expect(parameter.parse('175')).toBeTruthy()
-			expect(parameter.parse('')).toBeTruthy()
-			expect(parameter.parse('   ')).toBeTruthy()
-			expect(parameter.parse('!')).toBeTruthy()
+			expect(() => parameter.setOptions()).toThrow('There\'s no sense to define options for boolean parameter!')
 		})
 	})
 

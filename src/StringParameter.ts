@@ -30,14 +30,22 @@ export default class StringParameter extends QueryParameterBase implements Query
 	}
 
 
-	parse(value: string | undefined): string | null {
-		const isUndefined = value === undefined
-
-		if (isUndefined || (this.options.length && !this.options.includes(value))) {
+	parse(value: string | string[] | null | undefined): string | null {
+		if (value === null || value === undefined || Array.isArray(value)) {
 			return this.defaultValue
 		}
 
-		return value
+		const trimmedValue = value.trim()
+
+		if (trimmedValue === '') {
+			return this.defaultValue
+		}
+
+		if (this.options.length && !this.options.includes(trimmedValue)) {
+			return this.defaultValue
+		}
+
+		return trimmedValue
 	}
 
 

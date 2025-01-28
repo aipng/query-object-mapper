@@ -30,11 +30,14 @@ export default class NumberParameter extends QueryParameterBase implements Query
 	}
 
 
-	parse(value: string | undefined): number | null {
-		const isUndefined = value === undefined
+	parse(value: string | string[] | null | undefined): number | null {
+		if (value === null || value === undefined || Array.isArray(value)) {
+			return this.defaultValue
+		}
+
 		const convertedValue = Number(value)
 
-		if (isUndefined || (this.options.length && !this.options.includes(convertedValue))) {
+		if (this.options.length && !this.options.includes(convertedValue)) {
 			return this.defaultValue
 		}
 

@@ -44,12 +44,13 @@ export default class NumberArrayParameter extends QueryParameterBase implements 
 	}
 
 
-	parse(value: string | undefined): number[] {
+	parse(value: string | string[] | null | undefined): number[] {
 		if (!value) {
 			return this.defaultValues ?? []
 		}
 
-		const convertedValues = value.split(',').map(item => Number.parseInt(item))
+		const arrayValue = Array.isArray(value) ? value : value.split(',')
+		const convertedValues = arrayValue.map(item => Number.parseInt(item))
 
 		return this.options.length
 			? convertedValues.filter(value => this.options.includes(value))

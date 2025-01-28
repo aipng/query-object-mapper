@@ -20,6 +20,24 @@ Let's define three parameters:
 - boolean parameter `myBoolean`, that would be represented by 'myb' parameter in URL
 - number parameter `myNumber` with default value 3
 
+### Boolean parameter
+- parses
+  - '1' or 'true' as true
+  - '0' or 'false' as false
+  - other inputs are parsed as default value (as undefined)
+- generates '1' for true, '0' for false
+
+### String parameter
+- trims input, empty string is parsed as undefined
+- array input parsed as undefined
+
+### Number parameter
+- array input parsed as undefined
+
+### Number array parameter
+- parses array or comma separated list
+- generates comma separated list
+
 ```javascript
 import QueryMapper from 'query-object-mapper'
 
