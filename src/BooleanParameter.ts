@@ -18,7 +18,15 @@ export default class BooleanParameter extends QueryParameterBase implements Quer
 	}
 
 
-	parse(value: string | string[] | null | undefined): boolean {
+	parse(value: string | null | Array<string|null> | undefined): boolean {
+		if (value === null || value === undefined) {
+			return this.defaultValue
+		}
+
+		if (Array.isArray(value)) {
+			return this.defaultValue
+		}
+
 		if (value === '1' || value === 'true') {
 			return true
 		}

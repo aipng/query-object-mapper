@@ -44,17 +44,26 @@ export default class NumberArrayParameter extends QueryParameterBase implements 
 	}
 
 
-	parse(value: string | string[] | null | undefined): number[] {
-		if (!value) {
+	parse(value: string | null | Array<string|null> | undefined): number[] {
+		if (value === null || value === undefined) {
 			return this.defaultValues ?? []
 		}
 
-		const arrayValue = Array.isArray(value) ? value : value.split(',')
-		const convertedValues = arrayValue.map(item => Number.parseInt(item))
+		if (Array.isArray(value)) {
+			const numbers = value
+				.filter((item): item is string => item !== null)
+				.map(Number)
+				.filter(item => !this.options.length || this.options.includes(item))
 
-		return this.options.length
-			? convertedValues.filter(value => this.options.includes(value))
-			: convertedValues
+			return numbers.length ? numbers : (this.defaultValues ?? [])
+		}
+
+		const numbers = value
+			.split(',')
+			.map(Number)
+			.filter(item => !this.options.length || this.options.includes(item))
+
+		return numbers.length ? numbers : (this.defaultValues ?? [])
 	}
 
 

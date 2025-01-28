@@ -17,14 +17,16 @@ export default class QueryMapper {
 	private conditions: Record<string, ConditionDefinition> = {}
 
 
-	parse(query: Record<string, string | string[] | null>): Record<string, unknown> {
-		const result: Record<string, string> = {}
+	parse(query: Record<string, string | null | Array<string|null>>): Record<string, unknown> {
+		const result: Record<string, unknown> = {}
 
 		this.params.forEach((parameter) => {
+			const value = query[parameter.urlName]
+			
 			Object.assign(
 				result,
 				{
-					[parameter.name]: parameter.parse(query[parameter.urlName]),
+					[parameter.name]: parameter.parse(value),
 				},
 			)
 		})

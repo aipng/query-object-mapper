@@ -92,6 +92,24 @@ describe('Number parameter', () => {
 
 			expect(parameter.parse(['123'])).toBe(42)
 		})
+
+		it('should handle array with nulls', () => {
+			const parameter = new NumberParameter('parameter')
+			
+			parameter.setDefault(42)
+
+			expect(parameter.parse(['123', null])).toBe(42)
+		})
+
+		it('should handle array with valid option and nulls', () => {
+			const parameter = new NumberParameter('parameter')
+			
+			parameter
+				.setDefault(42)
+				.setOptions([123, 42])
+
+			expect(parameter.parse(['123', null])).toBe(42)
+		})
 	})
 
 

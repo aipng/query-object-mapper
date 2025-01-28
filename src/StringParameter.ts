@@ -30,8 +30,12 @@ export default class StringParameter extends QueryParameterBase implements Query
 	}
 
 
-	parse(value: string | string[] | null | undefined): string | null {
-		if (value === null || value === undefined || Array.isArray(value)) {
+	parse(value: string | null | Array<string|null> | undefined): string | null {
+		if (value === null || value === undefined) {
+			return this.defaultValue
+		}
+
+		if (Array.isArray(value)) {
 			return this.defaultValue
 		}
 

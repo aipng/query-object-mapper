@@ -30,8 +30,12 @@ export default class NumberParameter extends QueryParameterBase implements Query
 	}
 
 
-	parse(value: string | string[] | null | undefined): number | null {
-		if (value === null || value === undefined || Array.isArray(value)) {
+	parse(value: string | null | Array<string|null> | undefined): number | null {
+		if (value === null || value === undefined) {
+			return this.defaultValue
+		}
+
+		if (Array.isArray(value)) {
 			return this.defaultValue
 		}
 

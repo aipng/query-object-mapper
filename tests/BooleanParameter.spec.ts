@@ -74,6 +74,14 @@ describe('Boolean parameter', () => {
 
 			expect(() => parameter.setOptions()).toThrow('There\'s no sense to define options for boolean parameter!')
 		})
+
+		it('should handle array with nulls', () => {
+			const parameter = new BooleanParameter('parameter')
+			
+			parameter.setDefault(true)
+
+			expect(parameter.parse(['1', null])).toBe(true)
+		})
 	})
 
 

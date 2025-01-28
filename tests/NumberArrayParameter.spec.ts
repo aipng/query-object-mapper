@@ -126,6 +126,19 @@ describe('Number array parameter', () => {
 			expect(parameter.parse(input)).toStrictEqual(result)
 		})
 
+		it('should handle array with nulls', () => {
+			const parameter = new NumberArrayParameter('parameter')
+
+			expect(parameter.parse(['123', null, '456'])).toStrictEqual([123, 456])
+		})
+
+		it('should handle array with nulls and options', () => {
+			const parameter = new NumberArrayParameter('parameter')
+			parameter.setOptions([123, 456])
+
+			expect(parameter.parse(['123', null, '789'])).toStrictEqual([123])
+		})
+
 	})
 
 
@@ -148,13 +161,13 @@ describe('Number array parameter', () => {
 		it('should generate one value string', () => {
 			const parameter = new NumberArrayParameter('parameter')
 
-			expect(parameter.generate([102])).toStrictEqual('102')
+			expect(parameter.generate([102])).toBe('102')
 		})
 
 		it('should generate string from nubmer array', () => {
 			const parameter = new NumberArrayParameter('parameter')
 
-			expect(parameter.generate([103, 203, 303])).toStrictEqual('103,203,303')
+			expect(parameter.generate([103, 203, 303])).toBe('103,203,303')
 		})
 
 		it('should throw error when values are not between options', () => {
@@ -172,7 +185,7 @@ describe('Number array parameter', () => {
 
 			parameter.setOptions([105, 106])
 
-			expect(parameter.generate([106])).toStrictEqual('106')
+			expect(parameter.generate([106])).toBe('106')
 		})
 
 		it('should generate null from default option value', () => {

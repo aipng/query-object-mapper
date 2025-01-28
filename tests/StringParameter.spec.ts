@@ -129,6 +129,22 @@ describe('String parameter', () => {
 			expect(parameter.parse('')).toBe('default')
 			expect(parameter.parse('   ')).toBe('default')
 		})
+
+		it('should handle array with nulls', () => {
+			const parameter = new StringParameter('parameter')
+			parameter.setDefault('default')
+
+			expect(parameter.parse(['value', null])).toBe('default')
+		})
+
+		it('should handle array with valid option and nulls', () => {
+			const parameter = new StringParameter('parameter')
+			parameter
+				.setDefault('default')
+				.setOptions(['value', 'default'])
+
+			expect(parameter.parse(['value', null])).toBe('default')
+		})
 	})
 
 	describe('should generate query value from parameter value', () => {

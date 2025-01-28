@@ -16,6 +16,8 @@ describe('Query mapper', () => {
 				numberParam: '10',
 				trueParam: '1',
 				falseParam: '0',
+				alternativeTrueParam: 'true',
+				alternativeFalseParam: 'false',
 				numberOptions: '10,20',
 			}
 
@@ -25,6 +27,8 @@ describe('Query mapper', () => {
 			mapper.addNumberParam('numberParam')
 			mapper.addBooleanParam('trueParam')
 			mapper.addBooleanParam('falseParam')
+			mapper.addBooleanParam('alternativeTrueParam')
+			mapper.addBooleanParam('alternativeFalseParam')
 			mapper.addArrayParam('numberOptions')
 
 			expect(mapper.parse(testQuery)).toStrictEqual({
@@ -32,6 +36,8 @@ describe('Query mapper', () => {
 				numberParam: 10,
 				trueParam: true,
 				falseParam: false,
+				alternativeTrueParam: true,
+				alternativeFalseParam: false,
 				numberOptions: [10, 20],
 			})
 		})
@@ -95,6 +101,45 @@ describe('Query mapper', () => {
 			expect(mapper.parse(testQuery)).toStrictEqual({
 				trialsOnly: true,
 				dealsOnly: true,
+			})
+		})
+
+		it('should handle array with nulls for all parameter types', () => {
+			const mapper = new QueryMapper()
+			
+			mapper.addStringParam('string').setDefault('default')
+			mapper.addNumberParam('number').setDefault(42)
+			mapper.addBooleanParam('boolean').setDefault(true)
+			mapper.addArrayParam('array').setDefault([1, 2])
+
+			const testQuery = {
+				string: ['value', null],
+				number: ['123', null],
+				boolean: ['1', null],
+				array: ['1', '2', null]
+			}
+
+			expect(mapper.parse(testQuery)).toStrictEqual({
+				string: 'default',
+				number: 42,
+				boolean: true,
+				array: [1, 2]
+			})
+		})
+
+		it('should handle array with nulls for conditional parameters', () => {
+			const mapper = new QueryMapper()
+			
+			mapper.addStringParam('fulfilled')
+			mapper.addConditionFor('fulfilled', 'fulfilledCondition')
+
+			const testQuery = {
+				fulfilled: ['value', null]
+			}
+
+			expect(mapper.parse(testQuery)).toStrictEqual({
+				fulfilled: null,
+				fulfilledCondition: false
 			})
 		})
 
