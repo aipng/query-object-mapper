@@ -110,10 +110,25 @@ export default class QueryMapper {
 	}
 
 
+	/** @deprecated */
 	addArrayParam(name: string, urlName: string | null = null, type: 'number' | 'string' = 'number'): QueryParameter {
-		const parameter = type === 'string'
-			? new StringArrayParameter(name, urlName)
-			: new NumberArrayParameter(name, urlName)
+		if (type === 'string') {
+			return this.addStringArrayParam(name, urlName)
+		} else {
+			return this.addNumberArrayParam(name, urlName)
+		}
+	}
+
+	addStringArrayParam(name: string, urlName: string | null = null): QueryParameter {
+		const parameter = new StringArrayParameter(name, urlName)
+
+		this.params.push(parameter)
+
+		return parameter
+	}
+
+	addNumberArrayParam(name: string, urlName: string | null = null): QueryParameter {
+		const parameter = new NumberArrayParameter(name, urlName)
 
 		this.params.push(parameter)
 

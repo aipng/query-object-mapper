@@ -30,8 +30,8 @@ describe('Query mapper', () => {
 			mapper.addBooleanParam('falseParam')
 			mapper.addBooleanParam('alternativeTrueParam')
 			mapper.addBooleanParam('alternativeFalseParam')
-			mapper.addArrayParam('numberOptions')
-			mapper.addArrayParam('stringOptions', null, 'string')
+			mapper.addNumberArrayParam('numberOptions')
+			mapper.addStringArrayParam('stringOptions', null)
 
 			expect(mapper.parse(testQuery)).toStrictEqual({
 				stringParam: 'value',
@@ -165,8 +165,8 @@ describe('Query mapper', () => {
 			mapper.addNumberParam('numberParam')
 			mapper.addBooleanParam('falseParam')
 			mapper.addBooleanParam('trueParam')
-			mapper.addArrayParam('numberOptions')
-			mapper.addArrayParam('stringOptions', null, 'string')
+			mapper.addNumberArrayParam('numberOptions')
+			mapper.addStringArrayParam('stringOptions', null)
 
 			const parameterObject = {
 				stringParam: 'value',
