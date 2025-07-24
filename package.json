@@ -21,6 +21,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
+    "test:ci": "vitest run",
     "lint:oxlint": "oxlint . -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint .",
     "lint": "run-s lint:oxlint lint:eslint",
@@ -28,10 +29,8 @@
     "lintfix:eslint": "eslint . --fix",
     "lintfix": "run-s lintfix:oxlint lintfix:eslint",
     "prepare": "rm -rf dist && npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "git add -A src",
-    "postversion": "git push && git push --tags"
+    "prerelease": "git diff-index --quiet HEAD -- && npm run test:ci && npm run lint",
+    "release": "commit-and-tag-version"
   },
   "keywords": [
     "query",
