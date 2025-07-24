@@ -108,4 +108,4 @@ console.log(urlQueryObject === {
 ## How does it work?
 - default parameter values are not propagated to query
 - boolean parameters are converted to string representation (true => '1', false => '0')
-- unknown options are silently parsed to default value, but cannot be generated to query
+- unknown options are silently parsed to the default value but cannot be generated to query
