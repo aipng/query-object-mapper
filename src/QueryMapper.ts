@@ -2,6 +2,7 @@ import BooleanParameter from './BooleanParameter'
 import NumberArrayParameter from './NumberArrayParameter'
 import NumberParameter from './NumberParameter'
 import QueryParameter from './QueryParameter'
+import StringArrayParameter from './StringArrayParameter'
 import StringParameter from './StringParameter'
 
 
@@ -17,12 +18,12 @@ export default class QueryMapper {
 	private conditions: Record<string, ConditionDefinition> = {}
 
 
-	parse(query: Record<string, string | null | Array<string|null>>): Record<string, unknown> {
+	parse(query: Record<string, string | null | Array<string | null>>): Record<string, unknown> {
 		const result: Record<string, unknown> = {}
 
 		this.params.forEach((parameter) => {
 			const value = query[parameter.urlName]
-			
+
 			Object.assign(
 				result,
 				{
@@ -109,8 +110,10 @@ export default class QueryMapper {
 	}
 
 
-	addArrayParam(name: string, urlName: string | null = null): QueryParameter {
-		const parameter = new NumberArrayParameter(name, urlName)
+	addArrayParam(name: string, urlName: string | null = null, type: 'number' | 'string' = 'number'): QueryParameter {
+		const parameter = type === 'string'
+			? new StringArrayParameter(name, urlName)
+			: new NumberArrayParameter(name, urlName)
 
 		this.params.push(parameter)
 

@@ -8,9 +8,8 @@ export default interface QueryParameter {
 
 	setOptions(options: unknown[]): this
 
-	parse(value: string | null | Array<string|null> | undefined): string | number | boolean | number[] | null
+	parse(value: string | null | Array<string|null> | undefined): string | number | boolean | number[] | string[] | null
 
 	generate(value: unknown): string | number | null
 
 }
-
