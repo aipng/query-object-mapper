@@ -49,9 +49,9 @@ export default class QueryMapper {
 	}
 
 
-	generateQuery(params: Record<string, unknown>): Record<string, string | number | null> {
-		const result: Record<string, string | number | null> = {}
-		const conditionValues: Record<string, string | number | null> = {}
+	generateQuery(params: Record<string, unknown>): Record<string, string | number | null | Array<string | number>> {
+		const result: Record<string, string | number | null | Array<string | number>> = {}
+		const conditionValues: Record<string, string | number | null | Array<string | number>> = {}
 
 		Object
 			.entries(params)
@@ -119,6 +119,7 @@ export default class QueryMapper {
 		}
 	}
 
+
 	addStringArrayParam(name: string, urlName: string | null = null): QueryParameter {
 		const parameter = new StringArrayParameter(name, urlName)
 
@@ -126,6 +127,7 @@ export default class QueryMapper {
 
 		return parameter
 	}
+
 
 	addNumberArrayParam(name: string, urlName: string | null = null): QueryParameter {
 		const parameter = new NumberArrayParameter(name, urlName)
